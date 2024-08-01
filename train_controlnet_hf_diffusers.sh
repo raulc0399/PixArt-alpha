@@ -24,7 +24,7 @@ accelerate launch ./controlnet/train_pixart_controlnet_hf.py \
  --tracker_project_name="pixart_pose_controlnet" \
  --seed=42 \
  --dataloader_num_workers=8 \
-#  --validation_image "$VALIDATION_IMAGES_DIR/validation_images/1_pose.jpg" "$VALIDATION_IMAGES_DIR/validation_images/2_pose.jpg" "$VALIDATION_IMAGES_DIR/validation_images/3_pose.jpg" "$VALIDATION_IMAGES_DIR/validation_images/4_pose.jpg" \
+#  --validation_image "$VALIDATION_IMAGES_DIR/1_pose.jpg" "$VALIDATION_IMAGES_DIR/2_pose.jpg" "$VALIDATION_IMAGES_DIR/3_pose.jpg" "$VALIDATION_IMAGES_DIR/4_pose.jpg" \
 #  --validation_prompt "Friends standing in front of a modern building" "Two friends chatting in a park" "A woman enjoying a beautiful sunny day" "Three people on a business meeting" \
 #  --num_validation_images=1 \
 #  --validation_steps=100 \

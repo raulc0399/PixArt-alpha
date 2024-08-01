@@ -881,7 +881,7 @@ def main():
 
     # Prepare everything with our `accelerator`.
     controlnet_transformer = PixArtControlNetTransformerModel(transformer, controlnet, training=True)
-    controlnet_transformer, optimizer, train_dataloader, lr_scheduler = accelerator.prepare(controlnet_transformer, optimizer, train_dataloader, lr_scheduler)
+    controlnet_transformer, controlnet, optimizer, train_dataloader, lr_scheduler = accelerator.prepare(controlnet_transformer, controlnet, optimizer, train_dataloader, lr_scheduler)
     
     # We need to recalculate our total training steps as the size of the training dataloader may have changed.
     num_update_steps_per_epoch = math.ceil(len(train_dataloader) / args.gradient_accumulation_steps)
@@ -945,7 +945,7 @@ def main():
 
     latent_channels = transformer.config.in_channels
     for epoch in range(first_epoch, args.num_train_epochs):
-        controlnet_transformer.controlnet.train()
+        controlnet.train()
         train_loss = 0.0
         for step, batch in enumerate(train_dataloader):
             with accelerator.accumulate(controlnet):
@@ -1034,7 +1034,7 @@ def main():
                 # Backpropagate
                 accelerator.backward(loss)
                 if accelerator.sync_gradients:
-                    params_to_clip = controlnet_transformer.controlnet.parameters()
+                    params_to_clip = controlnet.parameters()
                     accelerator.clip_grad_norm_(params_to_clip, args.max_grad_norm)
                 optimizer.step()
                 lr_scheduler.step()
@@ -1073,7 +1073,7 @@ def main():
                         logger.info(f"Saved state to {save_path}")
 
                     if args.validation_prompt is not None and global_step % args.validation_steps == 0:
-                        log_validation(vae, transformer, controlnet_transformer.controlnet, tokenizer, noise_scheduler, text_encoder, args, accelerator, weight_dtype, global_step, is_final_validation=False)
+                        log_validation(vae, transformer, controlnet, tokenizer, noise_scheduler, text_encoder, args, accelerator, weight_dtype, global_step, is_final_validation=False)
 
             logs = {"step_loss": loss.detach().item(), "lr": lr_scheduler.get_last_lr()[0]}
             progress_bar.set_postfix(**logs)
@@ -1084,7 +1084,7 @@ def main():
     # Save the lora layers
     accelerator.wait_for_everyone()
     if accelerator.is_main_process:
-        controlnet = unwrap_model(controlnet_transformer.controlnet, keep_fp32_wrapper=False)
+        controlnet = unwrap_model(controlnet, keep_fp32_wrapper=False)
         controlnet.save_pretrained(os.path.join(args.output_dir, "controlnet"))
         
         image_logs = None

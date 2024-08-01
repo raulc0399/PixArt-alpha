@@ -9,6 +9,8 @@
 MODEL_DIR="PixArt-alpha/PixArt-XL-2-1024-MS"
 OUTPUT_DIR="./output/pixart-controlnet-open-pose"
 TRAINING_DATA_DIR="/workspace/open_pose_controlnet"
+VALIDATION_IMAGES=("$TRAINING_DATA_DIR/validation_images/pose/1_pose.jpg" "$TRAINING_DATA_DIR/validation_images/pose/2_pose.jpg" "$TRAINING_DATA_DIR/validation_images/pose/3_pose.jpg" "$TRAINING_DATA_DIR/validation_images/pose/4_pose.jpg")
+VALIDATION_PROMPTS=("Friends standing in front of a modern building" "Two friends chatting in a park" "A woman enjoying a beautiful sunny day" "Three people on a business meeting")
 
 accelerate launch ./controlnet/train_pixart_controlnet_hf.py \
  --pretrained_model_name_or_path=$MODEL_DIR \
@@ -21,7 +23,7 @@ accelerate launch ./controlnet/train_pixart_controlnet_hf.py \
  --gradient_accumulation_steps=4 \
  --report_to="wandb" \
  --seed=42 \
- --dataloader_num_workers=8
+ --dataloader_num_workers=8 \
+ --validation_image=$VALIDATION_IMAGES \
+ --validation_prompt=$VALIDATION_PROMPTS \
 #  --lr_scheduler="cosine" --lr_warmup_steps=0 \
-#  --validation_image "./conditioning_image_1.png" "./conditioning_image_2.png" \
-#  --validation_prompt "red circle with blue background" "cyan circle with brown floral background" \

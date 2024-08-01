@@ -8,9 +8,8 @@
 
 MODEL_DIR="PixArt-alpha/PixArt-XL-2-1024-MS"
 OUTPUT_DIR="./output/pixart-controlnet-open-pose"
-TRAINING_DATA_DIR="/workspace/open_pose_controlnet"
-VALIDATION_IMAGES=("$TRAINING_DATA_DIR/validation_images/pose/1_pose.jpg" "$TRAINING_DATA_DIR/validation_images/pose/2_pose.jpg" "$TRAINING_DATA_DIR/validation_images/pose/3_pose.jpg" "$TRAINING_DATA_DIR/validation_images/pose/4_pose.jpg")
-VALIDATION_PROMPTS=("Friends standing in front of a modern building" "Two friends chatting in a park" "A woman enjoying a beautiful sunny day" "Three people on a business meeting")
+TRAINING_DATA_DIR="/workspace/open_pose_controlnet/train"
+VALIDATION_IMAGES_DIR="/workspace/open_pose_controlnet/validation_images/pose"
 
 accelerate launch ./controlnet/train_pixart_controlnet_hf.py \
  --pretrained_model_name_or_path=$MODEL_DIR \
@@ -25,8 +24,8 @@ accelerate launch ./controlnet/train_pixart_controlnet_hf.py \
  --tracker_project_name="pixart_pose_controlnet" \
  --seed=42 \
  --dataloader_num_workers=8 \
- --validation_image=$VALIDATION_IMAGES \
- --validation_prompt=$VALIDATION_PROMPTS \
+#  --validation_image "$VALIDATION_IMAGES_DIR/validation_images/1_pose.jpg" "$VALIDATION_IMAGES_DIR/validation_images/2_pose.jpg" "$VALIDATION_IMAGES_DIR/validation_images/3_pose.jpg" "$VALIDATION_IMAGES_DIR/validation_images/4_pose.jpg" \
+#  --validation_prompt "Friends standing in front of a modern building" "Two friends chatting in a park" "A woman enjoying a beautiful sunny day" "Three people on a business meeting" \
 #  --num_validation_images=1 \
 #  --validation_steps=100 \
 #  --max_train_samples=15000 \

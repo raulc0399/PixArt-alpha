@@ -22,8 +22,13 @@ accelerate launch ./controlnet/train_pixart_controlnet_hf.py \
  --train_batch_size=2 \
  --gradient_accumulation_steps=4 \
  --report_to="wandb" \
+ --tracker_project_name="pixart_pose_controlnet" \
  --seed=42 \
  --dataloader_num_workers=8 \
  --validation_image=$VALIDATION_IMAGES \
  --validation_prompt=$VALIDATION_PROMPTS \
+#  --num_validation_images=1 \
+#  --validation_steps=100 \
+#  --max_train_samples=15000 \
+#  --checkpointing_steps=500 \
 #  --lr_scheduler="cosine" --lr_warmup_steps=0 \

@@ -92,20 +92,16 @@ def generate_images_from_checkpoints(checkpoints_folder, output_folder, prompts,
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Script to validate folder with checkpoints.')
-    parser.add_argument('--checkpoints_folder', type=str, help='Path to the folder containing checkpoints')
-    parser.add_argument('--output_folder', type=str, help='Path to the output folder')
-    parser.add_argument('--control_images_folder', type=str, help='Path to the folder containing control images')
+    parser.add_argument('--checkpoints_folder', type=str, help='Path to the folder containing checkpoints', required=True)
+    parser.add_argument('--output_folder', type=str, help='Path to the output folder', required=True)
+    parser.add_argument('--control_images', nargs='+', help='Path to the folder containing control images', required=True)
+    parser.add_argument('--validation_prompts', nargs='+', help='List of validation prompts', required=True)
     args = parser.parse_args()
 
     checkpoints_folder = args.checkpoints_folder
     output_folder = args.output_folder
-    control_images_folder = args.control_images_folder
-
-    prompts = ["red circle with blue background", "cyan circle with brown floral background"]
-    control_images = [
-        os.path.join(control_images_folder, "conditioning_image_1.png"),
-        os.path.join(control_images_folder, "conditioning_image_2.png")
-    ]
+    control_images = args.control_images
+    prompts = args.validation_prompts
 
     assert len(prompts) == len(control_images)
 
